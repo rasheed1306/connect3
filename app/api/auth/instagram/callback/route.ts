@@ -35,7 +35,7 @@ export async function GET(request: Request) {
      if (process.env.NODE_ENV === "production") {
        cookieStore.delete("instagram_auth_state");
        return NextResponse.redirect(
-         `${process.env.NEXT_PUBLIC_SITE_URL}/clubs?error=invalid_state&description=${encodeURIComponent("Security validation failed. Please try connecting your Instagram account again.")}`
+         `${process.env.NEXT_PUBLIC_SITE_URL}/clubs?error=auth_failed&description=${encodeURIComponent("Authentication failed. Please try again.")}`
        );
      }
   }
