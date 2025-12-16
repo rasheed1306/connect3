@@ -33,7 +33,13 @@ export async function GET(request: Request) {
   // We can be strict about state verification to prevent CSRF
   if (!storedState || state !== storedState) {
      console.warn("State mismatch or missing in Instagram callback");
-     // TODO fail here in production
+     // In production, fail immediately to prevent CSRF attacks
+     if (process.env.NODE_ENV === "production") {
+       cookieStore.delete("instagram_auth_state");
+       return NextResponse.redirect(
+         `${process.env.NEXT_PUBLIC_SITE_URL}/clubs?error=auth_failed&description=${encodeURIComponent("Authentication failed. Please try again.")}`
+       );
+     }
   }
   // Clear state cookie
   cookieStore.delete("instagram_auth_state");
